@@ -26,7 +26,39 @@ app.MapGet("/productos", () =>
 app.MapGet("/productos/{id}", (int id) =>
 {
     var producto = productos.FirstOrDefault(c => c.Id == id);
+    return producto;
 });
+
+app.MapPost("/productos", (Productos Producto) =>
+{
+    productos.Add(Producto);
+    return Results.Ok();
+});
+
+app.MapPut("/productos/{id}", (int id, Productos producto) =>
+{
+    var existingProducs = productos.FirstOrDefault(c => c.Id == id);
+
+    if (existingProducs != null)
+    {
+        existingProducs.Nombre = producto.Nombre;
+        existingProducs.Cantidad = producto.Cantidad;
+        return Results.Ok();
+    }
+    else return Results.NotFound();
+});
+
+app.MapDelete("/productos/{id}", (int id) =>
+{
+    var existingProduc = productos.FirstOrDefault(c => c.Id == id);
+    if (existingProduc != null) {
+        productos.Remove(existingProduc);
+        return Results.Ok();
+    }
+    else return Results.NotFound();
+});
+
+app.Run();
 
 internal class Productos
 {
